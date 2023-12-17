@@ -4,7 +4,7 @@ from ..helpers.request_helpers import generate_query_path
 from ..helpers.requests import request, Response
 
 
-class Markets(object):
+class Markets:
     def __init__(self, indexerHost: str, api_timeout: Optional[int] = None):
         self.host = indexerHost
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT
@@ -94,7 +94,7 @@ class Markets(object):
             {"createdBeforeOrAtHeight": starting_before_or_at_height, "limit": limit},
         )
 
-    def get_perpetual_market_candles(
+    def get_perpetual_market_candles(  # pylint: disable=too-many-arguments
         self,
         market: str,
         resolution: str,

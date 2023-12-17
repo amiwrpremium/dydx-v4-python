@@ -1,9 +1,9 @@
 from typing import Tuple
+from datetime import datetime, timedelta
 import grpc
 
-from datetime import datetime, timedelta
+from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder  # pylint: disable=no-name-in-module
 
-from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder
 from .helpers.chain_helpers import (
     QUOTE_QUANTUMS_ATOMIC_RESOLUTION,
     Order,
@@ -66,8 +66,7 @@ class CompositeClient:
         is_stateful_order = is_order_flag_stateful_order(order_flags)
         if is_stateful_order:
             return 0, self.calculate_good_til_block_time(good_til_time_in_seconds)
-        else:
-            return good_til_block, 0
+        return good_til_block, 0
 
     def validate_good_til_block(self, good_til_block: int) -> None:
         response = self.validator_client.get.latest_block()
@@ -75,7 +74,7 @@ class CompositeClient:
         lower_bound = next_valid_block_height
         upper_bound = next_valid_block_height + SHORT_BLOCK_WINDOW
         if good_til_block < lower_bound or good_til_block > upper_bound:
-            raise Exception(
+            raise Exception(  # pylint: disable=broad-exception-raised  # FIXME
                 f"Invalid Short-Term order GoodTilBlock. "
                 f"Should be greater-than-or-equal-to {lower_bound} "
                 f"and less-than-or-equal-to {upper_bound}. "
@@ -86,11 +85,11 @@ class CompositeClient:
     # Use human readable form of input, including price and size
     # The quantum and subticks are calculated and submitted
 
-    def place_order(
+    def place_order(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         subaccount: Subaccount,
         market: str,
-        type: OrderType,
+        type: OrderType,  # pylint: disable=redefined-builtin
         side: OrderSide,
         price: float,
         size: float,
@@ -164,12 +163,12 @@ class CompositeClient:
             subaccount=subaccount, msg=msg, zeroFee=True
         )
 
-    def place_short_term_order(
+    def place_short_term_order(  # pylint: disable=too-many-arguments
         self,
         subaccount: Subaccount,
         market: str,
         side: OrderSide,
-        type: OrderType,
+        type: OrderType,  # pylint: disable=redefined-builtin
         price: float,
         size: float,
         client_id: int,
@@ -239,10 +238,8 @@ class CompositeClient:
         """
         return (
             1
-            if (
-                order_type == OrderType.MARKET
-                or order_type == OrderType.STOP_MARKET
-                or order_type == OrderType.TAKE_PROFIT_MARKET
+            if order_type in (
+                OrderType.MARKET, OrderType.STOP_MARKET, OrderType.TAKE_PROFIT_MARKET
             )
             else 0
         )
@@ -258,19 +255,17 @@ class CompositeClient:
         """
         if order_type == OrderType.LIMIT:
             return Order.CONDITION_TYPE_UNSPECIFIED
-        elif order_type == OrderType.MARKET:
+        if order_type == OrderType.MARKET:
             return Order.CONDITION_TYPE_UNSPECIFIED
-        elif order_type == OrderType.STOP_LIMIT or order_type == OrderType.STOP_MARKET:
+        if order_type in (OrderType.STOP_LIMIT, OrderType.STOP_MARKET):
             return Order.CONDITION_TYPE_STOP_LOSS
-        elif (
-            order_type == OrderType.TAKE_PROFIT_LIMIT
-            or order_type == OrderType.TAKE_PROFIT_MARKET
+        if (
+            order_type in (OrderType.TAKE_PROFIT_LIMIT, OrderType.TAKE_PROFIT_MARKET)
         ):
             return Order.CONDITION_TYPE_TAKE_PROFIT
-        else:
-            raise ValueError("order_type is invalid")
+        raise ValueError("order_type is invalid")
 
-    def calculate_conditional_order_trigger_subticks(
+    def calculate_conditional_order_trigger_subticks(  # pylint: disable=too-many-arguments
         self,
         order_type: OrderType,
         atomic_resolution: int,
@@ -298,13 +293,10 @@ class CompositeClient:
 
         :returns: Conditional Order Trigger Subticks
         """
-        if order_type == OrderType.LIMIT or order_type == OrderType.MARKET:
+        if order_type in (OrderType.LIMIT, OrderType.MARKET):
             return 0
-        elif (
-            order_type == OrderType.STOP_LIMIT
-            or order_type == OrderType.STOP_MARKET
-            or order_type == OrderType.TAKE_PROFIT_LIMIT
-            or order_type == OrderType.TAKE_PROFIT_MARKET
+        if order_type in (
+                OrderType.STOP_LIMIT, OrderType.STOP_MARKET, OrderType.TAKE_PROFIT_LIMIT, OrderType.TAKE_PROFIT_MARKET
         ):
             if trigger_price is None:
                 raise ValueError("trigger_price is required for conditional orders")
@@ -314,14 +306,13 @@ class CompositeClient:
                 quantum_conversion_exponent,
                 subticks_per_tick,
             )
-        else:
-            raise ValueError("order_type is invalid")
+        raise ValueError("order_type is invalid")
 
-    def place_order_message(
+    def place_order_message(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         subaccount: Subaccount,
         market: str,
-        type: OrderType,
+        type: OrderType,  # pylint: disable=redefined-builtin
         side: OrderSide,
         price: float,
         size: float,
@@ -384,11 +375,11 @@ class CompositeClient:
             conditional_order_trigger_subticks=conditional_order_trigger_subticks,
         )
 
-    def place_short_term_order_message(
+    def place_short_term_order_message(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         subaccount: Subaccount,
         market: str,
-        type: OrderType,
+        type: OrderType,  # pylint: disable=redefined-builtin
         side: OrderSide,
         price: float,
         size: float,
@@ -433,7 +424,7 @@ class CompositeClient:
             conditional_order_trigger_subticks=0,
         )
 
-    def cancel_order(
+    def cancel_order(  # pylint: disable=too-many-arguments
         self,
         subaccount: Subaccount,
         client_id: int,
@@ -512,7 +503,7 @@ class CompositeClient:
             subaccount=subaccount, msg=msg, zeroFee=True
         )
 
-    def cancel_order_message(
+    def cancel_order_message(  # pylint: disable=too-many-arguments
         self,
         subaccount: Subaccount,
         market: str,

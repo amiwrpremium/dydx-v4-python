@@ -23,7 +23,7 @@ class MessageLog:
 
 
 @dataclass
-class TxResponse:
+class TxResponse:  # pylint: disable=too-many-instance-attributes
     """Transaction response.
 
     :raises OutOfGasError: Out of gas error

@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-from v4_proto.cosmos.mint.v1beta1.query_pb2 import (
+from v4_proto.cosmos.mint.v1beta1.query_pb2 import (  # pylint: disable=no-name-in-module
     QueryAnnualProvisionsResponse,
     QueryInflationResponse,
     QueryParamsResponse,

@@ -4,7 +4,7 @@ from .modules.markets import Markets
 from .modules.utility import Utility
 
 
-class IndexerClient(object):
+class IndexerClient:
     def __init__(
         self,
         config: IndexerConfig,

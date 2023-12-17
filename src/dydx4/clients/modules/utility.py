@@ -4,7 +4,7 @@ from ..helpers.request_helpers import generate_query_path
 from ..helpers.requests import request, Response
 
 
-class Utility(object):
+class Utility:
     def __init__(self, indexerHost: str, api_timeout: Optional[int] = None):
         self.host = indexerHost
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT

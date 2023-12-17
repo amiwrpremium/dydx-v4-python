@@ -1,6 +1,7 @@
 """Transaction gas strategy."""
 
 from abc import ABC, abstractmethod
+from logging import getLogger
 from typing import Dict, Optional
 
 from .tx import Transaction
@@ -68,7 +69,10 @@ class SimulationGasStrategy(GasStrategy):
             try:
                 block_params = self._client.query_params("baseapp", "BlockParams")
                 self._max_gas = int(block_params["max_gas"])
-            except:
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                getLogger(__name__).warning(
+                    "Failed to get block gas limit: %s", exc, exc_info=True
+                )
                 self._max_gas = -1
 
         return self._max_gas or -1

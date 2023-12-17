@@ -4,7 +4,7 @@ from .helpers.requests import request, Response
 from .constants import DEFAULT_API_TIMEOUT
 
 
-class FaucetClient(object):
+class FaucetClient:
     def __init__(
         self,
         host: str,

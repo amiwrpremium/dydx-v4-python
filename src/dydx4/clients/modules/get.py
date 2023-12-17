@@ -1,13 +1,21 @@
-import grpc
-import logging
-
 from typing import Optional
+import logging
+import grpc
 
-from ..constants import ValidatorConfig
-
-from v4_proto.dydxprotocol.clob.query_pb2 import *
-from v4_proto.dydxprotocol.subaccounts.query_pb2 import *
-from v4_proto.dydxprotocol.prices.query_pb2 import *
+from v4_proto.dydxprotocol.clob.query_pb2 import (  # pylint: disable=no-name-in-module
+    QueryClobPairAllResponse,
+    QueryAllClobPairRequest
+)
+from v4_proto.dydxprotocol.subaccounts.query_pb2 import (  # pylint: disable=no-name-in-module
+    QuerySubaccountAllResponse,
+    QueryAllSubaccountRequest,
+    QueryGetSubaccountRequest
+)
+from v4_proto.dydxprotocol.prices.query_pb2 import (  # pylint: disable=no-name-in-module
+    QueryMarketPriceRequest,
+    QueryAllMarketPricesResponse,
+    QueryAllMarketPricesRequest,
+)
 
 from v4_proto.cosmos.base.tendermint.v1beta1 import (
     query_pb2_grpc as tendermint_query_grpc,
@@ -58,10 +66,13 @@ from v4_proto.dydxprotocol.clob import (
     equity_tier_limit_config_pb2 as equity_tier_limit_config_type,
 )
 
+from ..constants import ValidatorConfig
+
+
 DEFAULT_TIMEOUTHEIGHT = 30  # blocks
 
 
-class Get:
+class Get:  # pylint: disable=too-many-instance-attributes
     def __init__(
         self,
         config: ValidatorConfig,
@@ -89,6 +100,8 @@ class Get:
         self.stubPrices = prices_query_grpc.QueryStub(self.chain_channel)
         self.stubClob = clob_query_grpc.QueryStub(self.chain_channel)
 
+        self.timeout_height = 0
+
     # default client methods
     def latest_block(self) -> tendermint_query.GetLatestBlockResponse:
         """
@@ -105,11 +118,9 @@ class Get:
         try:
             block = self.latest_block()
             self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
-        except Exception as e:
+        except Exception as exc:  # pylint: disable=broad-exception-caught
             logging.debug(
-                "error while fetching latest block, setting timeout height to 0:{}".format(
-                    e
-                )
+                f"error while fetching latest block, setting timeout height to 0:{exc}"
             )
             self.timeout_height = 0
 
@@ -168,8 +179,7 @@ class Get:
         if account_any.Is(account.DESCRIPTOR):
             account_any.Unpack(account)
             return account
-        else:
-            return None
+        return None
 
     def subaccounts(self) -> QuerySubaccountAllResponse:
         """

@@ -17,7 +17,7 @@ session.headers.update(
 )
 
 
-class Response(object):
+class Response:
     def __init__(
         self,
         status_code: int,
@@ -54,8 +54,7 @@ def request(
 
     if response.content:
         return Response(response.status_code, response.json(), response.headers)
-    else:
-        return Response(response.status_code, {}, response.headers)
+    return Response(response.status_code, {}, response.headers)
 
 
 def send_request(uri, method, headers=None, **kwargs):

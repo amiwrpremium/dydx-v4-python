@@ -4,13 +4,13 @@ from ..helpers.requests import request, Response
 from ..constants import DEFAULT_API_TIMEOUT
 
 
-class Account(object):
+class Account:
     def __init__(
         self,
-        indexerHost: str,
+        indexer_host: str,
         api_timeout: Optional[int] = None,
     ):
-        self.host = indexerHost
+        self.host = indexer_host
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT
 
     # ============ Request Helpers ============
@@ -77,7 +77,7 @@ class Account(object):
             {},
         )
 
-    def get_subaccount_perpetual_positions(
+    def get_subaccount_perpetual_positions(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,
@@ -128,7 +128,7 @@ class Account(object):
             },
         )
 
-    def get_subaccount_asset_positions(
+    def get_subaccount_asset_positions(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,
@@ -179,7 +179,7 @@ class Account(object):
             },
         )
 
-    def get_subaccount_transfers(
+    def get_subaccount_transfers(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,
@@ -220,7 +220,7 @@ class Account(object):
             },
         )
 
-    def get_subaccount_orders(
+    def get_subaccount_orders(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,
@@ -228,7 +228,7 @@ class Account(object):
         ticker_type: str = "PERPETUAL",
         side: str = None,
         status: str = None,
-        type: str = None,
+        type: str = None,  # pylint: disable=redefined-builtin
         limit: int = None,
         good_til_block_before_or_at: int = None,
         good_til_block_time_before_or_at: str = None,
@@ -326,7 +326,7 @@ class Account(object):
             {},
         )
 
-    def get_subaccount_fills(
+    def get_subaccount_fills(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,

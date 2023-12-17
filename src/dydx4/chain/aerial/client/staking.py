@@ -2,8 +2,8 @@
 
 from enum import Enum
 
-from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from v4_proto.cosmos.staking.v1beta1.tx_pb2 import (
+from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.staking.v1beta1.tx_pb2 import (  # pylint: disable=no-name-in-module
     MsgBeginRedelegate,
     MsgDelegate,
     MsgUndelegate,

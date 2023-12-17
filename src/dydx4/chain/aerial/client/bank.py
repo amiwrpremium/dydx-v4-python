@@ -1,7 +1,7 @@
 """Bank send message."""
 
-from v4_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from v4_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin  # pylint: disable=no-name-in-module
 
 from ...crypto.address import Address
 

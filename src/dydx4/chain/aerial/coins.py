@@ -3,7 +3,7 @@
 import re
 from typing import List
 
-from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin  # pylint: disable=no-name-in-module
 
 
 def parse_coins(value: str) -> List[Coin]:

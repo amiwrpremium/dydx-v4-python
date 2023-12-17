@@ -3,6 +3,7 @@
 import json
 import math
 import time
+from logging import getLogger
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
@@ -10,36 +11,36 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 
-from v4_proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from v4_proto.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from v4_proto.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from v4_proto.cosmos.bank.v1beta1.query_pb2 import (
+from v4_proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.bank.v1beta1.query_pb2 import (  # pylint: disable=no-name-in-module
     QueryAllBalancesRequest,
     QueryBalanceRequest,
 )
-from v4_proto.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from v4_proto.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
+from v4_proto.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=no-name-in-module
     PubKey,
 )
-from v4_proto.cosmos.distribution.v1beta1.query_pb2 import (
+from v4_proto.cosmos.distribution.v1beta1.query_pb2 import (  # pylint: disable=no-name-in-module
     QueryDelegationRewardsRequest,
 )
-from v4_proto.cosmos.distribution.v1beta1.query_pb2_grpc import (
+from v4_proto.cosmos.distribution.v1beta1.query_pb2_grpc import (  # pylint: disable=no-name-in-module
     QueryStub as DistributionGrpcClient,
 )
-from v4_proto.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-from v4_proto.cosmos.params.v1beta1.query_pb2_grpc import (
+from v4_proto.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.params.v1beta1.query_pb2_grpc import (  # pylint: disable=no-name-in-module
     QueryStub as QueryParamsGrpcClient,
 )
-from v4_proto.cosmos.staking.v1beta1.query_pb2 import (
+from v4_proto.cosmos.staking.v1beta1.query_pb2 import (  # pylint: disable=no-name-in-module
     QueryDelegatorDelegationsRequest,
     QueryDelegatorUnbondingDelegationsRequest,
     QueryValidatorsRequest,
 )
-from v4_proto.cosmos.staking.v1beta1.query_pb2_grpc import (
+from v4_proto.cosmos.staking.v1beta1.query_pb2_grpc import (  # pylint: disable=no-name-in-module
     QueryStub as StakingGrpcClient,
 )
-from v4_proto.cosmos.tx.v1beta1.service_pb2 import (
+from v4_proto.cosmos.tx.v1beta1.service_pb2 import (  # pylint: disable=no-name-in-module
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
@@ -149,7 +150,7 @@ class StakingSummary:
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
 
-class LedgerClient:
+class LedgerClient:  # pylint: disable=too-many-instance-attributes
     """Ledger client."""
 
     def __init__(
@@ -288,7 +289,7 @@ class LedgerClient:
 
         return [Coin(amount=coin.amount, denom=coin.denom) for coin in resp.balances]
 
-    def send_tokens(
+    def send_tokens(  # pylint: disable=too-many-arguments
         self,
         destination: Address,
         amount: int,
@@ -408,7 +409,7 @@ class LedgerClient:
             current_positions=current_positions, unbonding_positions=unbonding_positions
         )
 
-    def delegate_tokens(
+    def delegate_tokens(  # pylint: disable=too-many-arguments
         self,
         validator: Address,
         amount: int,
@@ -439,7 +440,7 @@ class LedgerClient:
             self, tx, sender, gas_limit=gas_limit, memo=memo
         )
 
-    def redelegate_tokens(
+    def redelegate_tokens(  # pylint: disable=too-many-arguments
         self,
         current_validator: Address,
         next_validator: Address,
@@ -473,7 +474,7 @@ class LedgerClient:
             self, tx, sender, gas_limit=gas_limit, memo=memo
         )
 
-    def undelegate_tokens(
+    def undelegate_tokens(  # pylint: disable=too-many-arguments
         self,
         validator: Address,
         amount: int,
@@ -605,7 +606,7 @@ class LedgerClient:
         try:
             resp = self.txs.GetTx(req)
         except grpc.RpcError as e:
-            details = e.details()
+            details = e.details()  # pylint: disable=no-member
             if "not found" in details:
                 raise NotFoundError() from e
             raise
@@ -638,7 +639,10 @@ class LedgerClient:
             for attribute in event.attributes:
                 try:
                     event_data[attribute.key.decode()] = attribute.value.decode()
-                except:
+                except Exception as exc:  # pylint: disable=broad-except
+                    getLogger(__name__).warning(
+                        "Unable to decode event attribute %s: %s", attribute, exc
+                    )
                     event_data[attribute.key] = attribute.value
             events[event.type] = event_data
 

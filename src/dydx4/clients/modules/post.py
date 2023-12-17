@@ -1,8 +1,8 @@
 from typing import Optional, Any
 from google.protobuf import message as _message
 
-from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder
-from v4_proto.dydxprotocol.clob.order_pb2 import Order
+from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder  # pylint: disable=no-name-in-module
+from v4_proto.dydxprotocol.clob.order_pb2 import Order  # pylint: disable=no-name-in-module
 
 from ..helpers.chain_helpers import ORDER_FLAGS_LONG_TERM, ORDER_FLAGS_SHORT_TERM
 
@@ -57,12 +57,12 @@ class Post:
             gas_limit=gas_limit,
             memo=None,
             broadcast_mode=broadcast_mode
-            if (broadcast_mode != None)
+            if (broadcast_mode is not None)
             else self.default_broadcast_mode(msg),
             fee=0 if zeroFee else None,
         )
 
-    def place_order(
+    def place_order(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         subaccount: Subaccount,
         client_id: int,
@@ -167,7 +167,7 @@ class Post:
             broadcast_mode=broadcast_mode,
         )
 
-    def cancel_order(
+    def cancel_order(  # pylint: disable=too-many-arguments
         self,
         subaccount: Subaccount,
         client_id: int,
@@ -232,7 +232,7 @@ class Post:
             broadcast_mode=broadcast_mode,
         )
 
-    def transfer(
+    def transfer(  # pylint: disable=too-many-arguments
         self,
         subaccount: Subaccount,
         recipient_address: str,
@@ -286,8 +286,7 @@ class Post:
             order_flags = msg.order.order_id.order_flags
             if order_flags == ORDER_FLAGS_SHORT_TERM:
                 return BroadcastMode.BroadcastTxSync
-            elif order_flags == ORDER_FLAGS_LONG_TERM:
+            if order_flags == ORDER_FLAGS_LONG_TERM:
                 return BroadcastMode.BroadcastTxCommit
-            else:
-                return BroadcastMode.BroadcastTxCommit
+            return BroadcastMode.BroadcastTxCommit
         return BroadcastMode.BroadcastTxSync

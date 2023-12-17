@@ -33,6 +33,7 @@ sympy = "^1.12.0"
 web3 = "^6.5.0"
 websocket_client = "^1.6.1"
 v4-proto = "^2.0.0"
+blspy = "^2.0.2"
 
 [tool.poetry.dev-dependencies]
 wheel = "^0.35.1"

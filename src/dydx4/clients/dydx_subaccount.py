@@ -23,7 +23,7 @@ class Subaccount:
 
     @property
     def address(self) -> str:
-        return self.wallet.address().__str__()
+        return str(self.wallet.address())
 
     @property
     def account_number(self) -> int:

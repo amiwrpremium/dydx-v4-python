@@ -1,12 +1,12 @@
 import json
-import websocket
-import threading
 import time
+import threading
+import websocket
 
 from .constants import IndexerConfig
 
 
-class SocketClient:
+class SocketClient:  # pylint: disable=too-many-instance-attributes
     def __init__(
         self, config: IndexerConfig, on_message=None, on_open=None, on_close=None
     ):

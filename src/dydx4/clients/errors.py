@@ -46,10 +46,7 @@ class DydxApiError(DydxError):
         return self.__repr__()
 
     def __repr__(self):
-        return "DydxApiError(status_code={}, response={})".format(
-            self.status_code,
-            self.msg,
-        )
+        return f"DydxApiError(status_code={self.status_code}, response={self.msg})"
 
 
 class TransactionReverted(DydxError):

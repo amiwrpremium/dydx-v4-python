@@ -1,12 +1,12 @@
-from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder, MsgCancelOrder
-from v4_proto.dydxprotocol.clob.order_pb2 import Order, OrderId
-from v4_proto.dydxprotocol.subaccounts.subaccount_pb2 import SubaccountId
-from v4_proto.dydxprotocol.sending.transfer_pb2 import (
+from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder, MsgCancelOrder  # pylint: disable=no-name-in-module
+from v4_proto.dydxprotocol.clob.order_pb2 import Order, OrderId  # pylint: disable=no-name-in-module
+from v4_proto.dydxprotocol.subaccounts.subaccount_pb2 import SubaccountId  # pylint: disable=no-name-in-module
+from v4_proto.dydxprotocol.sending.transfer_pb2 import (  # pylint: disable=no-name-in-module
     Transfer,
     MsgWithdrawFromSubaccount,
     MsgDepositToSubaccount,
 )
-from v4_proto.dydxprotocol.sending.tx_pb2 import MsgCreateTransfer
+from v4_proto.dydxprotocol.sending.tx_pb2 import MsgCreateTransfer  # pylint: disable=no-name-in-module
 
 from .helpers.chain_helpers import (
     is_order_flag_stateful_order,
@@ -15,7 +15,7 @@ from .helpers.chain_helpers import (
 
 
 class Composer:
-    def compose_msg_place_order(
+    def compose_msg_place_order(  # pylint: disable=too-many-arguments, too-many-locals
         self,
         address: str,
         subaccount_number: int,
@@ -124,7 +124,7 @@ class Composer:
         )
         return MsgPlaceOrder(order=order)
 
-    def compose_msg_cancel_order(
+    def compose_msg_cancel_order(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,
@@ -178,7 +178,7 @@ class Composer:
             )
         return MsgCancelOrder(order_id=order_id, good_til_block=good_til_block)
 
-    def compose_msg_transfer(
+    def compose_msg_transfer(  # pylint: disable=too-many-arguments
         self,
         address: str,
         subaccount_number: int,

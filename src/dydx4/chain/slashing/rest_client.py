@@ -20,7 +20,7 @@
 
 from google.protobuf.json_format import Parse
 
-from v4_proto.cosmos.slashing.v1beta1.query_pb2 import (
+from v4_proto.cosmos.slashing.v1beta1.query_pb2 import (  # pylint: disable=no-name-in-module
     QueryParamsResponse,
     QuerySigningInfoRequest,
     QuerySigningInfoResponse,

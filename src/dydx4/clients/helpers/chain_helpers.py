@@ -1,5 +1,5 @@
 from enum import Flag, auto
-from v4_proto.dydxprotocol.clob.order_pb2 import Order
+from v4_proto.dydxprotocol.clob.order_pb2 import Order  # pylint: disable=no-name-in-module
 
 
 class OrderType(Flag):
@@ -77,12 +77,11 @@ QUOTE_QUANTUMS_ATOMIC_RESOLUTION = -6
 def is_order_flag_stateful_order(order_flag: int) -> bool:
     if order_flag == ORDER_FLAGS_SHORT_TERM:
         return False
-    elif order_flag == ORDER_FLAGS_LONG_TERM:
+    if order_flag == ORDER_FLAGS_LONG_TERM:
         return True
-    elif order_flag == ORDER_FLAGS_CONDITIONAL:
+    if order_flag == ORDER_FLAGS_CONDITIONAL:
         return True
-    else:
-        raise ValueError("Invalid order flag")
+    raise ValueError("Invalid order flag")
 
 
 def validate_good_til_fields(
@@ -93,32 +92,24 @@ def validate_good_til_fields(
     if is_stateful_order:
         if good_til_block_time == 0:
             raise ValueError(
-                "stateful orders must have a valid GTBT. GTBT: ${0}".format(
-                    good_til_block_time,
-                )
+                f"stateful orders must have a valid GTBT. GTBT: {good_til_block_time}"
             )
         if good_til_block != 0:
             raise ValueError(
-                "stateful order uses GTBT. GTB must be zero. GTB: ${0}".format(
-                    good_til_block,
-                )
+                f"stateful order uses GTBT. GTB must be zero. GTB: {good_til_block}"
             )
     else:
         if good_til_block == 0:
             raise ValueError(
-                "short term orders must have a valid GTB. GTB: ${0}".format(
-                    good_til_block,
-                )
+                f"short term orders must have a valid GTB. GTB: {good_til_block}"
             )
         if good_til_block_time != 0:
             raise ValueError(
-                "stateful order uses GTB. GTBT must be zero. GTBT: ${0}".format(
-                    good_til_block_time,
-                )
+                f"stateful order uses GTB. GTBT must be zero. GTBT: {good_til_block_time}"
             )
 
 
-def round(number: float, base: int) -> int:
+def round(number: float, base: int) -> int:  # pylint: disable=redefined-builtin
     return int(number / base) * base
 
 
@@ -155,70 +146,62 @@ def calculate_side(
     return Order.SIDE_BUY if side == OrderSide.BUY else Order.SIDE_SELL
 
 
-def calculate_time_in_force(
-    type: OrderType,
+def calculate_time_in_force(  # pylint: disable=too-many-return-statements, too-many-branches
+    type: OrderType,  # pylint: disable=redefined-builtin
     time_in_force: OrderTimeInForce,
     execution: OrderExecution,
     post_only: bool,
 ) -> Order_TimeInForce:
     if type == OrderType.MARKET:
         return Order_TimeInForce.TIME_IN_FORCE_IOC
-    elif type == OrderType.LIMIT:
+    if type == OrderType.LIMIT:
         if time_in_force == OrderTimeInForce.GTT:
             if post_only:
                 return Order_TimeInForce.TIME_IN_FORCE_POST_ONLY
-            else:
-                return Order_TimeInForce.TIME_IN_FORCE_UNSPECIFIED
-        elif time_in_force == OrderTimeInForce.FOK:
+            return Order_TimeInForce.TIME_IN_FORCE_UNSPECIFIED
+        if time_in_force == OrderTimeInForce.FOK:
             return Order_TimeInForce.TIME_IN_FORCE_FILL_OR_KILL
-        elif time_in_force == OrderTimeInForce.IOC:
+        if time_in_force == OrderTimeInForce.IOC:
             return Order_TimeInForce.TIME_IN_FORCE_IOC
-        else:
-            raise Exception("Unexpected code path: time_in_force")
-    elif type == OrderType.STOP_LIMIT or type == OrderType.TAKE_PROFIT_LIMIT:
+        raise Exception("Unexpected code path: time_in_force")  # pylint: disable=broad-exception-raised
+    if type in (OrderType.STOP_LIMIT, OrderType.TAKE_PROFIT_LIMIT):
         if execution == OrderExecution.DEFAULT:
             return Order_TimeInForce.TIME_IN_FORCE_UNSPECIFIED
-        elif execution == OrderExecution.POST_ONLY:
+        if execution == OrderExecution.POST_ONLY:
             return Order_TimeInForce.TIME_IN_FORCE_POST_ONLY
         if execution == OrderExecution.FOK:
             return Order_TimeInForce.TIME_IN_FORCE_FILL_OR_KILL
-        elif execution == OrderExecution.IOC:
+        if execution == OrderExecution.IOC:
             return Order_TimeInForce.TIME_IN_FORCE_IOC
-        else:
-            raise Exception("Unexpected code path: time_in_force")
-    elif type == OrderType.STOP_MARKET or type == OrderType.TAKE_PROFIT_MARKET:
+        raise Exception("Unexpected code path: time_in_force")  # pylint: disable=broad-exception-raised
+    if type in (OrderType.STOP_MARKET, OrderType.TAKE_PROFIT_MARKET):
         if execution == OrderExecution.DEFAULT:
-            raise Exception(
+            raise Exception(  # pylint: disable=broad-exception-raised
                 "Execution value DEFAULT not supported for STOP_MARKET or TAKE_PROFIT_MARKET"
             )
-        elif execution == OrderExecution.POST_ONLY:
-            raise Exception(
+        if execution == OrderExecution.POST_ONLY:
+            raise Exception(  # pylint: disable=broad-exception-raised
                 "Execution value POST_ONLY not supported for STOP_MARKET or TAKE_PROFIT_MARKET"
             )
         if execution == OrderExecution.FOK:
             return Order_TimeInForce.TIME_IN_FORCE_FILL_OR_KILL
-        elif execution == OrderExecution.IOC:
+        if execution == OrderExecution.IOC:
             return Order_TimeInForce.TIME_IN_FORCE_IOC
-        else:
-            raise Exception("Unexpected code path: time_in_force")
-    else:
-        raise Exception("Unexpected code path: time_in_force")
+        raise Exception("Unexpected code path: time_in_force")  # pylint: disable=broad-exception-raised
+    raise Exception("Unexpected code path: time_in_force")  # pylint: disable=broad-exception-raised
 
 
 def calculate_execution_condition(reduce_only: bool) -> int:
     if reduce_only:
         return Order.EXECUTION_CONDITION_REDUCE_ONLY
-    else:
-        return Order.EXECUTION_CONDITION_UNSPECIFIED
+    return Order.EXECUTION_CONDITION_UNSPECIFIED
 
 
-def calculate_order_flags(type: OrderType, time_in_force: OrderTimeInForce) -> int:
+def calculate_order_flags(type: OrderType, time_in_force: OrderTimeInForce) -> int:  # pylint: disable=redefined-builtin
     if type == OrderType.MARKET:
         return ORDER_FLAGS_SHORT_TERM
-    elif type == OrderType.LIMIT:
+    if type == OrderType.LIMIT:
         if time_in_force == OrderTimeInForce.GTT:
             return ORDER_FLAGS_LONG_TERM
-        else:
-            return ORDER_FLAGS_SHORT_TERM
-    else:
-        return ORDER_FLAGS_CONDITIONAL
+        return ORDER_FLAGS_SHORT_TERM
+    return ORDER_FLAGS_CONDITIONAL

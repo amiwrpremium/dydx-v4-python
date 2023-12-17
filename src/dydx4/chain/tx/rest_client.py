@@ -19,16 +19,11 @@
 
 """Implementation of Tx interface using REST."""
 
-import base64
 import json
-from typing import Any, Dict, List
 
 from google.protobuf.json_format import Parse, ParseDict
 
-from v4_proto.cosmos.crypto.secp256k1.keys_pb2 import (  # noqa: F401  # pylint: disable=unused-import
-    PubKey as ProtoPubKey,
-)
-from v4_proto.cosmos.tx.v1beta1.service_pb2 import (
+from v4_proto.cosmos.tx.v1beta1.service_pb2 import (  # pylint: disable=no-name-in-module
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,

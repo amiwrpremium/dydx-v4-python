@@ -4,11 +4,11 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, List, Optional, Union
 
-from google.protobuf.any_pb2 import Any as ProtoAny
+from google.protobuf.any_pb2 import Any as ProtoAny  # noqa   # pylint: disable=no-name-in-module
 
-from v4_proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from v4_proto.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
-from v4_proto.cosmos.tx.v1beta1.tx_pb2 import (
+from v4_proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode  # pylint: disable=no-name-in-module
+from v4_proto.cosmos.tx.v1beta1.tx_pb2 import (  # pylint: disable=no-name-in-module
     AuthInfo,
     Fee,
     ModeInfo,
