@@ -1,4 +1,4 @@
-from src.v4_client_py.clients.helpers.request_helpers import generate_query_path
+from src.dydx4.clients.helpers.request_helpers import generate_query_path
 
 
 def test_generate_query_path():

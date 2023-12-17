@@ -1,10 +1,10 @@
 import asyncio
 import logging
-from v4_client_py.chain.aerial.wallet import LocalWallet
-from v4_client_py.clients.dydx_subaccount import Subaccount
+from src.dydx4.chain.aerial.wallet import LocalWallet
+from src.dydx4.clients.dydx_subaccount import Subaccount
 
-from v4_client_py.clients.dydx_validator_client import ValidatorClient
-from v4_client_py.clients.constants import BECH32_PREFIX, Network
+from src.dydx4.clients.dydx_validator_client import ValidatorClient
+from src.dydx4.clients.constants import BECH32_PREFIX, Network
 
 from tests.constants import DYDX_TEST_MNEMONIC
 

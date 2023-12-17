@@ -1,5 +1,5 @@
-from v4_client_py.clients.dydx_validator_client import ValidatorClient
-from v4_client_py.clients.constants import Network
+from src.dydx4.clients.dydx_validator_client import ValidatorClient
+from src.dydx4.clients.constants import Network
 
 from tests.constants import DYDX_TEST_ADDRESS
 

@@ -1,5 +1,5 @@
-from v4_client_py.clients import IndexerClient
-from v4_client_py.clients.constants import Network, MARKET_BTC_USD
+from src.dydx4.clients import IndexerClient
+from src.dydx4.clients.constants import Network, MARKET_BTC_USD
 
 client = IndexerClient(
     config=Network.mainnet().indexer_config,
