@@ -53,9 +53,9 @@ def request(
         raise DydxApiError(response)
 
     if response.content:
-        return Response(response.status_code, response.json(), response.headers)
-    return Response(response.status_code, {}, response.headers)
+        return Response(response.status_code, response.json(), response.headers)  # type: ignore[arg-type]
+    return Response(response.status_code, {}, response.headers)  # type: ignore[arg-type]
 
 
-def send_request(uri, method, headers=None, **kwargs):
+def send_request(uri: str, method: str, headers: Optional[Dict[str, Any]] = None, **kwargs: Any) -> requests.Response:
     return getattr(session, method)(uri, headers=headers, **kwargs)

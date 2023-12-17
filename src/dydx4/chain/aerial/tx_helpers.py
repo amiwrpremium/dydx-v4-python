@@ -47,7 +47,7 @@ class TxResponse:  # pylint: disable=too-many-instance-attributes
         """
         return self.code == 0
 
-    def ensure_successful(self):
+    def ensure_successful(self) -> None:
         """Ensure transaction is successful.
 
         :raises OutOfGasError: Out of gas error

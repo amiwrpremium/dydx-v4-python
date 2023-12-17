@@ -130,7 +130,7 @@ class Network:
         self.faucet_endpoint = faucet_endpoint
 
     @classmethod
-    def testnet(cls):
+    def testnet(cls) -> "Network":
         validator_config = ValidatorConfig(
             grpc_endpoint=VALIDATOR_GRPC_TESTNET,
             chain_id=NETWORK_ID_TESTNET,
@@ -148,7 +148,7 @@ class Network:
         )
 
     @classmethod
-    def mainnet(cls):
+    def mainnet(cls) -> "Network":
         validator_config = ValidatorConfig(
             grpc_endpoint=VALIDATOR_GRPC_MAINNET,
             chain_id=NETWORK_ID_MAINNET,
@@ -165,5 +165,5 @@ class Network:
             faucet_endpoint=None,
         )
 
-    def string(self):
+    def string(self) -> str:
         return self.env

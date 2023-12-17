@@ -23,7 +23,7 @@ class Markets:
 
     # ============ Requests ============
 
-    def get_perpetual_markets(self, market: str = None) -> Response:
+    def get_perpetual_markets(self, market: Optional[str] = None) -> Response:
         """
         Get one or perpetual markets
 
@@ -68,7 +68,7 @@ class Markets:
         return self._get(uri)
 
     def get_perpetual_market_trades(
-        self, market: str, starting_before_or_at_height: int = None, limit: int = None
+            self, market: str, starting_before_or_at_height: Optional[int] = None, limit: Optional[int] = None
     ) -> Response:
         """
         Get trades for a perpetual market
@@ -84,6 +84,9 @@ class Markets:
         :param starting_before_or_at_height: optional
         :type starting_before_or_at_height: number
 
+        :param limit: optional (default 100)
+        :type limit: number
+
         :returns: Trade array
 
         :raises: DydxAPIError
@@ -95,12 +98,12 @@ class Markets:
         )
 
     def get_perpetual_market_candles(  # pylint: disable=too-many-arguments
-        self,
-        market: str,
-        resolution: str,
-        from_iso: str = None,
-        to_iso: str = None,
-        limit: int = None,
+            self,
+            market: str,
+            resolution: str,
+            from_iso: Optional[str] = None,
+            to_iso: Optional[str] = None,
+            limit: Optional[int] = None,
     ) -> Response:
         """
         Get Candles
@@ -149,11 +152,11 @@ class Markets:
         )
 
     def get_perpetual_market_funding(
-        self,
-        market: str,
-        effective_before_or_at: str = None,
-        effective_before_or_at_height: int = None,
-        limit: int = None,
+            self,
+            market: str,
+            effective_before_or_at: Optional[str] = None,
+            effective_before_or_at_height: Optional[int] = None,
+            limit: Optional[int] = None,
     ) -> Response:
         """
         Get Candles

@@ -217,7 +217,7 @@ class LedgerClient:  # pylint: disable=too-many-instance-attributes
         return self._gas_strategy
 
     @gas_strategy.setter
-    def gas_strategy(self, strategy: GasStrategy):
+    def gas_strategy(self, strategy: GasStrategy) -> None:
         """Set gas strategy.
 
         :param strategy: strategy

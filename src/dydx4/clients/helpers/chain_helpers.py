@@ -88,7 +88,7 @@ def validate_good_til_fields(
     is_stateful_order: bool,
     good_til_block_time: int,
     good_til_block: int,
-):
+) -> bool:
     if is_stateful_order:
         if good_til_block_time == 0:
             raise ValueError(
@@ -108,6 +108,8 @@ def validate_good_til_fields(
                 f"stateful order uses GTB. GTBT must be zero. GTBT: {good_til_block_time}"
             )
 
+    return True
+
 
 def round(number: float, base: int) -> int:  # pylint: disable=redefined-builtin
     return int(number / base) * base
@@ -117,7 +119,7 @@ def calculate_quantums(
     size: float,
     atomic_resolution: int,
     step_base_quantums: int,
-):
+) -> int:
     raw_quantums = size * 10 ** (-1 * atomic_resolution)
     quantums = round(raw_quantums, step_base_quantums)
     # step_base_quantums functions as the minimum order size
@@ -129,7 +131,7 @@ def calculate_subticks(
     atomic_resolution: int,
     quantum_conversion_exponent: int,
     subticks_per_tick: int,
-):
+) -> int:
     exponent = (
         atomic_resolution
         - quantum_conversion_exponent

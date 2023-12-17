@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional, Dict
 from datetime import datetime, timedelta
 import grpc
 
@@ -34,10 +34,10 @@ class CompositeClient:
     def __init__(
         self,
         network: Network,
-        api_timeout=None,
-        send_options=None,
-        credentials=grpc.ssl_channel_credentials(),
-    ):
+        api_timeout: Optional[int] = None,
+        send_options: Optional[Dict] = None,
+        credentials: grpc.ChannelCredentials = grpc.ssl_channel_credentials(),
+    ) -> None:
         self.indexer_client = IndexerClient(
             network.indexer_config, api_timeout, send_options
         )
@@ -100,7 +100,7 @@ class CompositeClient:
         execution: OrderExecution,
         post_only: bool,
         reduce_only: bool,
-        trigger_price: float = None,
+        trigger_price: Optional[float] = None,
     ) -> SubmittedTx:
         """
         Place order
@@ -140,6 +140,9 @@ class CompositeClient:
 
         :param reduce_only: required
         :type reduce_only: bool
+
+        :param trigger_price: required
+        :type trigger_price: float
 
         :returns: Tx information
         """
@@ -271,7 +274,7 @@ class CompositeClient:
         atomic_resolution: int,
         quantum_conversion_exponent: int,
         subticks_per_tick: int,
-        trigger_price: float,
+        trigger_price: Optional[float] = None,
     ) -> int:
         """
         Calculate Conditional Order Trigger Subticks
@@ -323,15 +326,15 @@ class CompositeClient:
         execution: OrderExecution,
         post_only: bool,
         reduce_only: bool,
-        trigger_price: float = None,
+        trigger_price: Optional[float] = None,
     ) -> MsgPlaceOrder:
         markets_response = self.indexer_client.markets.get_perpetual_markets(market)
-        market = markets_response.data["markets"][market]
-        clob_pair_id = market["clobPairId"]
-        atomic_resolution = market["atomicResolution"]
-        step_base_quantums = market["stepBaseQuantums"]
-        quantum_conversion_exponent = market["quantumConversionExponent"]
-        subticks_per_tick = market["subticksPerTick"]
+        market_info = markets_response.data["markets"][market]
+        clob_pair_id = int(market_info["clobPairId"])
+        atomic_resolution = market_info["atomicResolution"]
+        step_base_quantums = market_info["stepBaseQuantums"]
+        quantum_conversion_exponent = market_info["quantumConversionExponent"]
+        subticks_per_tick = market_info["subticksPerTick"]
         order_side = calculate_side(side)
         quantums = calculate_quantums(size, atomic_resolution, step_base_quantums)
         subticks = calculate_subticks(
@@ -393,12 +396,12 @@ class CompositeClient:
 
         # Construct the MsgPlaceOrder.
         markets_response = self.indexer_client.markets.get_perpetual_markets(market)
-        market = markets_response.data["markets"][market]
-        clob_pair_id = market["clobPairId"]
-        atomic_resolution = market["atomicResolution"]
-        step_base_quantums = market["stepBaseQuantums"]
-        quantum_conversion_exponent = market["quantumConversionExponent"]
-        subticks_per_tick = market["subticksPerTick"]
+        market_info = markets_response.data["markets"][market]
+        clob_pair_id = int(market_info["clobPairId"])
+        atomic_resolution = market_info["atomicResolution"]
+        step_base_quantums = market_info["stepBaseQuantums"]
+        quantum_conversion_exponent = market_info["quantumConversionExponent"]
+        subticks_per_tick = market_info["subticksPerTick"]
         order_side = calculate_side(side)
         quantums = calculate_quantums(size, atomic_resolution, step_base_quantums)
         subticks = calculate_subticks(
@@ -518,8 +521,8 @@ class CompositeClient:
 
         # Construct the MsgPlaceOrder.
         markets_response = self.indexer_client.markets.get_perpetual_markets(market)
-        market = markets_response.data["markets"][market]
-        clob_pair_id = market["clobPairId"]
+        market_info = markets_response.data["markets"][market]
+        clob_pair_id = int(market_info["clobPairId"])
 
         good_til_block, good_til_block_time = self.generate_good_til_fields(
             order_flags,
@@ -566,7 +569,7 @@ class CompositeClient:
             recipient_address=recipient_address,
             recipient_subaccount_number=recipient_subaccount_number,
             asset_id=0,
-            amount=amount * 10**6,
+            amount=int(amount * 10**6),
         )
 
     def deposit_to_subaccount(

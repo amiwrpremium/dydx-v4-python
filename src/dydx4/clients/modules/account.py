@@ -81,10 +81,10 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        status: str = None,
-        limit: int = None,
-        created_before_or_at_height: int = None,
-        created_before_or_at_time: str = None,
+        status: Optional[str] = None,
+        limit: Optional[int] = None,
+        created_before_or_at_height: Optional[int] = None,
+        created_before_or_at_time: Optional[str] = None,
     ) -> Response:
         """
         Get perpetual positions
@@ -132,10 +132,10 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        status: str = None,
-        limit: int = None,
-        created_before_or_at_height: int = None,
-        created_before_or_at_time: str = None,
+        status: Optional[str] = None,
+        limit: Optional[int] = None,
+        created_before_or_at_height: Optional[int] = None,
+        created_before_or_at_time: Optional[str] = None,
     ) -> Response:
         """
         Get asset positions
@@ -183,9 +183,9 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        limit: int = None,
-        created_before_or_at_height: int = None,
-        created_before_or_at_time: str = None,
+        limit: Optional[int] = None,
+        created_before_or_at_height: Optional[int] = None,
+        created_before_or_at_time: Optional[str] = None,
     ) -> Response:
         """
         Get asset transfers record
@@ -224,15 +224,15 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        ticker: str = None,
+        ticker: Optional[str] = None,
         ticker_type: str = "PERPETUAL",
-        side: str = None,
-        status: str = None,
-        type: str = None,  # pylint: disable=redefined-builtin
-        limit: int = None,
-        good_til_block_before_or_at: int = None,
-        good_til_block_time_before_or_at: str = None,
-        return_latest_orders: bool = None,
+        side: Optional[str] = None,
+        status: Optional[str] = None,
+        type: Optional[str] = None,  # pylint: disable=redefined-builtin
+        limit: Optional[int] = None,
+        good_til_block_before_or_at: Optional[int] = None,
+        good_til_block_time_before_or_at: Optional[str] = None,
+        return_latest_orders: Optional[bool] = None,
     ) -> Response:
         """
         Get asset transfers record
@@ -330,11 +330,11 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        ticker: str = None,
-        ticker_type: str = None,
-        limit: int = None,
-        created_before_or_at_height: int = None,
-        created_before_or_at_time: str = None,
+        ticker: Optional[str] = None,
+        ticker_type: Optional[str] = None,
+        limit: Optional[int] = None,
+        created_before_or_at_height: Optional[int] = None,
+        created_before_or_at_time: Optional[str] = None,
     ) -> Response:
         """
         Get asset transfers record
@@ -389,8 +389,8 @@ class Account:
         self,
         address: str,
         subaccount_number: int,
-        effective_before_or_at: str = None,
-        effective_at_or_after: str = None,
+        effective_before_or_at: Optional[str] = None,
+        effective_at_or_after: Optional[str] = None,
     ) -> Response:
         """
         Get asset transfers record

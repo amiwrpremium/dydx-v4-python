@@ -2,7 +2,7 @@
 
 import base64
 import json
-from typing import List, Optional
+from typing import List, Optional, Union, Dict
 from urllib.parse import urlencode
 
 import requests
@@ -116,8 +116,9 @@ class RestClient:
         return response.content
 
     @staticmethod
-    def _url_encode(json_request):
-        """A Custom URL encodes that breaks down nested dictionaries to match REST api format.
+    def _url_encode(json_request: Dict[str, Union[str, Dict]]) -> str:
+        """
+        A Custom URL encodes that breaks down nested dictionaries to match REST api format.
 
         It converts dicts from:
         {"pagination": {"limit": "1", "something": "2"},}
@@ -129,7 +130,8 @@ class RestClient:
         :param json_request: JSON request
 
         :return: urlencoded json_request
-        """  # noqa: D401
+        """
+
         for outer_k, outer_v in json_request.copy().items():
             if isinstance(outer_v, dict):
                 for inner_k, inner_v in outer_v.items():
@@ -138,6 +140,6 @@ class RestClient:
 
         return urlencode(json_request, doseq=True)
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Destructor method."""
         self._session.close()

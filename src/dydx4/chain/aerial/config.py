@@ -35,7 +35,7 @@ class NetworkConfig:
     url: str
     faucet_url: Optional[str] = None
 
-    def validate(self):
+    def validate(self) -> None:
         """Validate the network configuration.
 
         :raises NetworkConfigError: Network config error
@@ -88,7 +88,7 @@ class NetworkConfig:
         )
 
     @classmethod
-    def fetchai_alpha_testnet(cls):
+    def fetchai_alpha_testnet(cls) -> None:
         """Get the fetchai alpha testnet.
 
         :raises RuntimeError: No alpha testnet available
@@ -96,7 +96,7 @@ class NetworkConfig:
         raise RuntimeError("No alpha testnet available")
 
     @classmethod
-    def fetchai_beta_testnet(cls):
+    def fetchai_beta_testnet(cls) -> None:
         """Get the Fetchai beta testnet.
 
         :raises RuntimeError: No beta testnet available
@@ -104,7 +104,7 @@ class NetworkConfig:
         raise RuntimeError("No beta testnet available")
 
     @classmethod
-    def fetch_dydx_stable_testnet(cls):
+    def fetch_dydx_stable_testnet(cls) -> "NetworkConfig":
         """Get the dydx stable testnet.
 
         :return: dydx stable testnet.

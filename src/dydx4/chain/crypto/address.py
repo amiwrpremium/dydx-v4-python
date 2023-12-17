@@ -44,7 +44,7 @@ class Address(UserString):
         self,
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize Address instance.
 
         :param value: str, byte, public key or Address another instance
@@ -87,18 +87,18 @@ class Address(UserString):
         else:
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
-    def __str__(self):
+    def __str__(self) -> str:
         """String representation of the address."""  # noqa: D401
         return self._display
 
-    def __bytes__(self):
+    def __bytes__(self) -> bytes:
         """bytes representation of the address."""
         return self._address
 
     @property
-    def data(self):  # noqa:
+    def data(self) -> str:
         """Return address in string."""
         return str(self)
 
-    def __json__(self):  # noqa:
+    def __json__(self) -> str:
         return str(self)

@@ -16,7 +16,7 @@ def prepare_and_broadcast_basic_transaction(  # pylint: disable=too-many-argumen
     account: Optional["Account"] = None,  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
-    broadcast_mode: BroadcastMode = None,
+    broadcast_mode: Optional[BroadcastMode] = None,
     fee: Optional[int] = None,
 ) -> SubmittedTx:
     """Prepare and broadcast basic transaction.

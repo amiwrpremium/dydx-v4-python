@@ -16,6 +16,6 @@ class JSONEncoder(json.JSONEncoder):
         return o.__json__
 
 
-def json_encode(data, **kwargs):
+def json_encode(data: Any, **kwargs: Any) -> str:
     """Json encode."""
     return JSONEncoder(**kwargs).encode(data)

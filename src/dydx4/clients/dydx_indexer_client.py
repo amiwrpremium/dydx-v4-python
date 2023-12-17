@@ -1,3 +1,4 @@
+from typing import Dict, Optional
 from .constants import DEFAULT_API_TIMEOUT, IndexerConfig
 from .modules.account import Account
 from .modules.markets import Markets
@@ -8,8 +9,8 @@ class IndexerClient:
     def __init__(
         self,
         config: IndexerConfig,
-        api_timeout=None,
-        send_options=None,
+        api_timeout: Optional[int] = None,
+        send_options: Optional[Dict] = None,
     ):
         self.config = config
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT

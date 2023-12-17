@@ -34,7 +34,7 @@ class TxState(Enum):
     Final = 2
 
 
-def _is_iterable(value) -> bool:
+def _is_iterable(value: Any) -> bool:
     try:
         iter(value)
         return True
@@ -97,13 +97,13 @@ class SigningCfg:
 class Transaction:
     """Transaction."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init the Transactions with transaction message, state, fee and body."""
         self._msgs: List[Any] = []
         self._state: TxState = TxState.Draft
         self._tx_body: Optional[TxBody] = None
-        self._tx = None
-        self._fee = None
+        self._tx: Optional[Tx] = None
+        self._fee: Optional[str] = None
 
     @property  # noqa
     def state(self) -> TxState:
@@ -114,7 +114,7 @@ class Transaction:
         return self._state
 
     @property  # noqa
-    def msgs(self):
+    def msgs(self) -> List[Any]:
         """Get the transaction messages.
 
         :return: transaction messages
@@ -130,7 +130,7 @@ class Transaction:
         return self._fee
 
     @property
-    def tx(self):
+    def tx(self) -> Tx:
         """Initialize.
 
         :raises RuntimeError: If the transaction has not been completed.
@@ -227,21 +227,23 @@ class Transaction:
             )
 
         sd = SignDoc()
-        sd.body_bytes = self._tx.body.SerializeToString()
-        sd.auth_info_bytes = self._tx.auth_info.SerializeToString()
-        sd.chain_id = chain_id
-        sd.account_number = account_number
+        if self._tx:
+            sd.body_bytes = self._tx.body.SerializeToString()
+            sd.auth_info_bytes = self._tx.auth_info.SerializeToString()
+            sd.chain_id = chain_id
+            sd.account_number = account_number
 
-        data_for_signing = sd.SerializeToString()
+            data_for_signing = sd.SerializeToString()
 
-        # Generating deterministic signature:
-        signature = signer.sign(
-            data_for_signing,
-            deterministic=deterministic,
-            canonicalise=True,
-        )
-        self._tx.signatures.extend([signature])
-        return self
+            # Generating deterministic signature:
+            signature = signer.sign(
+                data_for_signing,
+                deterministic=deterministic,
+                canonicalise=True,
+            )
+            self._tx.signatures.extend([signature])
+            return self
+        raise RuntimeError("Transaction is not sealed. It must be sealed before signing is possible.")
 
     def complete(self) -> "Transaction":
         """Update transaction state to Final.

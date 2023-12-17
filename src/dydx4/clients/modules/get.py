@@ -76,8 +76,8 @@ class Get:  # pylint: disable=too-many-instance-attributes
     def __init__(
         self,
         config: ValidatorConfig,
-        credentials=grpc.ssl_channel_credentials(),
-    ):
+        credentials: grpc.ChannelCredentials = grpc.ssl_channel_credentials(),
+    ) -> None:
         # chain stubs
         self.chain_channel = (
             grpc.secure_channel(config.grpc_endpoint, credentials)
@@ -114,7 +114,7 @@ class Get:  # pylint: disable=too-many-instance-attributes
             tendermint_query.GetLatestBlockRequest()
         )
 
-    def sync_timeout_height(self):
+    def sync_timeout_height(self) -> None:
         try:
             block = self.latest_block()
             self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
@@ -124,7 +124,7 @@ class Get:  # pylint: disable=too-many-instance-attributes
             )
             self.timeout_height = 0
 
-    def tx(self, tx_hash: str):
+    def tx(self, tx_hash: str) -> tx_service.GetTxResponse:
         """
         Get tx
 
@@ -135,7 +135,7 @@ class Get:  # pylint: disable=too-many-instance-attributes
         """
         return self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
 
-    def bank_balances(self, address: str):
+    def bank_balances(self, address: str) -> bank_query.QueryAllBalancesResponse:
         """
         Get wallet account balances
 
@@ -145,7 +145,7 @@ class Get:  # pylint: disable=too-many-instance-attributes
             bank_query.QueryAllBalancesRequest(address=address)
         )
 
-    def bank_balance(self, address: str, denom: str):
+    def bank_balance(self, address: str, denom: str) -> bank_query.QueryBalanceResponse:
         """
         Get wallet asset balance
 

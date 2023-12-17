@@ -168,7 +168,7 @@ class PrivateKey(Signer, PublicKey):
         return self.sign_digest(digest)
 
     def sign_digest(
-        self, digest: bytes, deterministic=True, canonicalise: bool = True
+        self, digest: bytes, deterministic: bool = True, canonicalise: bool = True
     ) -> bytes:
         """
         Sign digest.
@@ -196,7 +196,7 @@ def verify_aggregated_signatures(
     pks: List[PublicKey],
     msgs: List[bytes],
     aggregated_signature: bytes,
-    hashfunc=hashlib.sha256,
+    hashfunc: Callable = hashlib.sha256,
 ):
     """
     Verify signatures with pub keys and  messages.
@@ -214,7 +214,7 @@ def verify_aggregated_signatures(
 
 def verify_aggregated_signatures_digests(
     pks: List[PublicKey], digests: List[bytes], aggregated_signature: bytes
-):
+) -> bool:
     """
     Verify signatures with pub keys and  messages.
 

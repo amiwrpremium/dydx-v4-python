@@ -210,7 +210,7 @@ class PrivateKey(PublicKey, Signer):
         return sign_fnc(message, sigencode=sigencode)
 
     def sign_digest(
-        self, digest: bytes, deterministic=True, canonicalise: bool = True
+        self, digest: bytes, deterministic: bool=True, canonicalise: bool = True
     ) -> bytes:
         """
         Sign digest.

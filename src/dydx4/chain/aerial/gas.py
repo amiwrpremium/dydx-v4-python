@@ -114,7 +114,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         self._block_limit = block_limit or self.DEFAULT_BLOCK_LIMIT
         self._fallback_gas_limit = fallback_gas_limit or self.DEFAULT_FALLBACK_GAS_LIMIT
 
-    def update_entry(self, transaction_type: str, gas_limit: int):
+    def update_entry(self, transaction_type: str, gas_limit: int) -> None:
         """Update the entry of the transaction.
 
         :param transaction_type: transaction type

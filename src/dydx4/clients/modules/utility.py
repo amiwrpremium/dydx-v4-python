@@ -45,7 +45,7 @@ class Utility:
         uri = "/v4/height"
         return self._get(uri)
 
-    def screen(self, address) -> Response:
+    def screen(self, address: str) -> Response:
         """
         Screen an address to see if it is restricted
 

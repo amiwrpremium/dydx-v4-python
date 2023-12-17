@@ -39,7 +39,7 @@ class Signer(ABC):
 
     @abstractmethod
     def sign_digest(
-        self, digest: bytes, deterministic=False, canonicalise: bool = True
+        self, digest: bytes, deterministic: bool = False, canonicalise: bool = True
     ) -> bytes:
         """
         Perform digest signing.

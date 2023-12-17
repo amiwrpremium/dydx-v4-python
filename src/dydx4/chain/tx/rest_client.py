@@ -77,8 +77,8 @@ class TxRestClient(TxInterface):
 
         # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
-        self._fix_messages(dict_response["tx"]["body"]["messages"])
-        self._fix_messages(dict_response["tx_response"]["tx"]["body"]["messages"])
+        self._fix_messages(dict_response["tx"]["body"]["messages"])  # type: ignore[attr-defined]
+        self._fix_messages(dict_response["tx_response"]["tx"]["body"]["messages"])  # type: ignore[attr-defined]
 
         return ParseDict(dict_response, GetTxResponse())
 
@@ -104,9 +104,9 @@ class TxRestClient(TxInterface):
         # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
         for tx in dict_response["txs"]:
-            self._fix_messages(tx["body"]["messages"])
+            self._fix_messages(tx["body"]["messages"])  # type: ignore[attr-defined]
 
         for tx_response in dict_response["tx_responses"]:
-            self._fix_messages(tx_response["tx"]["body"]["messages"])
+            self._fix_messages(tx_response["tx"]["body"]["messages"])  # type: ignore[attr-defined]
 
         return ParseDict(dict_response, GetTxsEventResponse())

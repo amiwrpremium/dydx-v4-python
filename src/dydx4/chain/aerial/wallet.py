@@ -41,14 +41,14 @@ class Wallet(ABC, UserString):
         """
 
     @property
-    def data(self):
+    def data(self) -> Address:
         """Get the address of the wallet.
 
         :return: Address
         """
         return self.address()
 
-    def __json__(self):
+    def __json__(self) -> str:
         """
         Return the address in string format.
 

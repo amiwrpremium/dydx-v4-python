@@ -7,17 +7,17 @@ class Subaccount:
         self,
         wallet: LocalWallet,
         subaccount_number: int = 0,
-    ):
+    ) -> None:
         self.wallet = wallet
         self.subaccount_number = subaccount_number
 
     @classmethod
-    def random(cls):
+    def random(cls) -> "Subaccount":
         wallet = LocalWallet.generate(BECH32_PREFIX)
         return cls(wallet)
 
     @classmethod
-    def from_mnemonic(cls, mnemonic: str):
+    def from_mnemonic(cls, mnemonic: str) -> "Subaccount":
         wallet = LocalWallet.from_mnemonic(mnemonic, BECH32_PREFIX)
         return cls(wallet)
 

@@ -9,7 +9,7 @@ class ValidatorClient:
     def __init__(
         self,
         config: ValidatorConfig,
-        credentials=grpc.ssl_channel_credentials(),
+        credentials: grpc.ChannelCredentials = grpc.ssl_channel_credentials(),
     ):
         self._get = Get(config, credentials)
         self._post = Post(config)
