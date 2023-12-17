@@ -63,13 +63,14 @@ DEFAULT_TIMEOUTHEIGHT = 30  # blocks
 
 class Get:
     def __init__(
-            self,
-            config: ValidatorConfig,
-            credentials=grpc.ssl_channel_credentials(),
+        self,
+        config: ValidatorConfig,
+        credentials=grpc.ssl_channel_credentials(),
     ):
         # chain stubs
         self.chain_channel = (
-            grpc.secure_channel(config.grpc_endpoint, credentials) if config.ssl_enabled
+            grpc.secure_channel(config.grpc_endpoint, credentials)
+            if config.ssl_enabled
             else grpc.insecure_channel(config.grpc_endpoint)
         )
         self.config = config
@@ -90,12 +91,12 @@ class Get:
 
     # default client methods
     def latest_block(self) -> tendermint_query.GetLatestBlockResponse:
-        '''
+        """
         Get lastest block
 
         :returns: Response, containing block information
 
-        '''
+        """
         return self.stubCosmosTendermint.GetLatestBlock(
             tendermint_query.GetLatestBlockRequest()
         )
@@ -105,32 +106,36 @@ class Get:
             block = self.latest_block()
             self.timeout_height = block.block.header.height + DEFAULT_TIMEOUTHEIGHT
         except Exception as e:
-            logging.debug("error while fetching latest block, setting timeout height to 0:{}".format(e))
+            logging.debug(
+                "error while fetching latest block, setting timeout height to 0:{}".format(
+                    e
+                )
+            )
             self.timeout_height = 0
 
     def tx(self, tx_hash: str):
-        '''
+        """
         Get tx
 
         :param tx_hash: required
         :type: str
 
         :returns: Transaction
-        '''
+        """
         return self.stubTx.GetTx(tx_service.GetTxRequest(hash=tx_hash))
 
     def bank_balances(self, address: str):
-        '''
+        """
         Get wallet account balances
 
         :returns: All assets in the wallet
-        '''
+        """
         return self.stubBank.AllBalances(
             bank_query.QueryAllBalancesRequest(address=address)
         )
 
     def bank_balance(self, address: str, denom: str):
-        '''
+        """
         Get wallet asset balance
 
         :param address: required
@@ -142,20 +147,20 @@ class Get:
         :returns: Asset balance given the denom
 
         :raises: DydxAPIError
-        '''
+        """
         return self.stubBank.Balance(
             bank_query.QueryBalanceRequest(address=address, denom=denom)
         )
 
     def account(self, address: str) -> Optional[auth_type.BaseAccount]:
-        '''
+        """
         Get account information
 
         :param address: required
         :type address: str
 
         :returns: Account information, including account number and sequence
-        '''
+        """
         account_any = self.stubAuth.Account(
             auth_query.QueryAccountRequest(address=address)
         ).account
@@ -167,80 +172,78 @@ class Get:
             return None
 
     def subaccounts(self) -> QuerySubaccountAllResponse:
-        '''
+        """
         Get all subaccounts
 
         :returns: Subaccount information, including account number and sequence
-        '''
-        return self.stubSubaccounts.SubaccountAll(
-            QueryAllSubaccountRequest()
-        )
+        """
+        return self.stubSubaccounts.SubaccountAll(QueryAllSubaccountRequest())
 
-    def subaccount(self, address: str, account_number: int) -> Optional[subaccount_type.Subaccount]:
-        '''
+    def subaccount(
+        self, address: str, account_number: int
+    ) -> Optional[subaccount_type.Subaccount]:
+        """
         Get subaccount information
 
         :param address: required
         :type address: str
 
         :returns: Subaccount information, including account number and sequence
-        '''
+        """
         return self.stubSubaccounts.Subaccount(
             QueryGetSubaccountRequest(owner=address, number=account_number)
         ).subaccount
 
     def clob_pairs(self) -> QueryClobPairAllResponse:
-        '''
+        """
         Get all pairs
 
         :returns: All pairs
-        '''
-        return self.stubClob.ClobPairAll(
-            QueryAllClobPairRequest()
-        )
+        """
+        return self.stubClob.ClobPairAll(QueryAllClobPairRequest())
 
     def clob_pair(self, pair_id: int) -> clob_pair_type.ClobPair:
-        '''
+        """
         Get pair information
 
         :param pair_id: required
         :type pair_id: int
 
         :returns: Pair information
-        '''
+        """
         return self.stubClob.ClobPair(
             clob_query.QueryGetClobPairRequest(id=pair_id)
         ).clob_pair
 
     def prices(self) -> QueryAllMarketPricesResponse:
-        '''
+        """
         Get all market prices
 
         :returns: All market prices
-        '''
-        return self.stubPrices.AllMarketPrices(
-            QueryAllMarketPricesRequest()
-        )
+        """
+        return self.stubPrices.AllMarketPrices(QueryAllMarketPricesRequest())
 
     def price(self, market_id: int) -> market_price_type.MarketPrice:
-        '''
+        """
         Get market price
 
         :param market_id: required
         :type market_id: int
 
         :returns: Market price
-        '''
+        """
         return self.stubPrices.MarketPrice(
             QueryMarketPriceRequest(id=market_id)
         ).market_price
 
-    def equity_tier_limit_config(self) -> equity_tier_limit_config_type.EquityTierLimitConfiguration:
-        '''
+    def equity_tier_limit_config(
+        self,
+    ) -> equity_tier_limit_config_type.EquityTierLimitConfiguration:
+        """
         Get equity tier limit configuration
 
         :returns: Equity tier limit configuration
-        '''
+        """
         return self.stubClob.EquityTierLimitConfiguration(
             clob_query.QueryEquityTierLimitConfigurationRequest()
         ).equity_tier_limit_config

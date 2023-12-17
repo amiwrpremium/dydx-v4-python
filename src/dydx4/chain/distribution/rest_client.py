@@ -43,6 +43,7 @@ from v4_proto.cosmos.distribution.v1beta1.query_pb2 import (
 from .interface import Distribution
 from ..common.rest_client import RestClient
 
+
 class DistributionRestClient(Distribution):
     """Distribution REST client."""
 

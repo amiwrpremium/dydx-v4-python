@@ -1,4 +1,3 @@
-
 """Transaction."""
 
 from dataclasses import dataclass

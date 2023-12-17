@@ -1,4 +1,3 @@
-
 """Helper functions."""
 
 from datetime import timedelta
@@ -9,6 +8,7 @@ from v4_proto.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 
 from ..tx import SigningCfg
 from ..tx_helpers import SubmittedTx
+
 
 def prepare_and_broadcast_basic_transaction(
     client: "LedgerClient",  # type: ignore # noqa: F821
@@ -39,7 +39,6 @@ def prepare_and_broadcast_basic_transaction(
     if fee is None:
         fee = client.network_config.fee_minimum_gas_price
     if gas_limit is None:
-
         # we need to build up a representative transaction so that we can accurately simulate it
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),

@@ -33,34 +33,35 @@ class OrderExecution(Flag):
 # Enums to use in order proto fields. Use proto generated fields once that's fixed.
 # should match https://github.com/dydxprotocol/v4-chain/blob/main/proto/dydxprotocol/clob/order.proto#L159
 class Order_TimeInForce(Flag):
-    '''
+    """
     TIME_IN_FORCE_UNSPECIFIED - TIME_IN_FORCE_UNSPECIFIED represents the default behavior where an
     order will first match with existing orders on the book, and any
     remaining size will be added to the book as a maker order.
-    '''
+    """
+
     TIME_IN_FORCE_UNSPECIFIED = 0
 
-    '''
+    """
     TIME_IN_FORCE_IOC - TIME_IN_FORCE_IOC enforces that an order only be matched with
     maker orders on the book. If the order has remaining size after
     matching with existing orders on the book, the remaining size
     is not placed on the book.
-    '''
+    """
     TIME_IN_FORCE_IOC = 1
 
-    '''
+    """
     TIME_IN_FORCE_POST_ONLY - TIME_IN_FORCE_POST_ONLY enforces that an order only be placed
     on the book as a maker order. Note this means that validators will cancel
     any newly-placed post only orders that would cross with other maker
     orders.
-    '''
+    """
     TIME_IN_FORCE_POST_ONLY = 2
 
-    '''
+    """
     TIME_IN_FORCE_FILL_OR_KILL - TIME_IN_FORCE_FILL_OR_KILL enforces that an order will either be filled
     completely and immediately by maker orders on the book or canceled if the
     entire amount can‘t be matched.
-    '''
+    """
     TIME_IN_FORCE_FILL_OR_KILL = 3
 
 
@@ -73,9 +74,7 @@ SHORT_BLOCK_WINDOW = 20
 QUOTE_QUANTUMS_ATOMIC_RESOLUTION = -6
 
 
-def is_order_flag_stateful_order(
-        order_flag: int
-) -> bool:
+def is_order_flag_stateful_order(order_flag: int) -> bool:
     if order_flag == ORDER_FLAGS_SHORT_TERM:
         return False
     elif order_flag == ORDER_FLAGS_LONG_TERM:
@@ -83,13 +82,13 @@ def is_order_flag_stateful_order(
     elif order_flag == ORDER_FLAGS_CONDITIONAL:
         return True
     else:
-        raise ValueError('Invalid order flag')
+        raise ValueError("Invalid order flag")
 
 
 def validate_good_til_fields(
-        is_stateful_order: bool,
-        good_til_block_time: int,
-        good_til_block: int,
+    is_stateful_order: bool,
+    good_til_block_time: int,
+    good_til_block: int,
 ):
     if is_stateful_order:
         if good_til_block_time == 0:
@@ -119,17 +118,14 @@ def validate_good_til_fields(
             )
 
 
-def round(
-        number: float,
-        base: int
-) -> int:
+def round(number: float, base: int) -> int:
     return int(number / base) * base
 
 
 def calculate_quantums(
-        size: float,
-        atomic_resolution: int,
-        step_base_quantums: int,
+    size: float,
+    atomic_resolution: int,
+    step_base_quantums: int,
 ):
     raw_quantums = size * 10 ** (-1 * atomic_resolution)
     quantums = round(raw_quantums, step_base_quantums)
@@ -138,28 +134,32 @@ def calculate_quantums(
 
 
 def calculate_subticks(
-        price: float,
-        atomic_resolution: int,
-        quantum_conversion_exponent: int,
-        subticks_per_tick: int
+    price: float,
+    atomic_resolution: int,
+    quantum_conversion_exponent: int,
+    subticks_per_tick: int,
 ):
-    exponent = atomic_resolution - quantum_conversion_exponent - QUOTE_QUANTUMS_ATOMIC_RESOLUTION
+    exponent = (
+        atomic_resolution
+        - quantum_conversion_exponent
+        - QUOTE_QUANTUMS_ATOMIC_RESOLUTION
+    )
     raw_subticks = price * 10 ** (exponent)
     subticks = round(raw_subticks, subticks_per_tick)
     return max(subticks, subticks_per_tick)
 
 
 def calculate_side(
-        side: OrderSide,
+    side: OrderSide,
 ) -> Order.Side:
     return Order.SIDE_BUY if side == OrderSide.BUY else Order.SIDE_SELL
 
 
 def calculate_time_in_force(
-        type: OrderType,
-        time_in_force: OrderTimeInForce,
-        execution: OrderExecution,
-        post_only: bool
+    type: OrderType,
+    time_in_force: OrderTimeInForce,
+    execution: OrderExecution,
+    post_only: bool,
 ) -> Order_TimeInForce:
     if type == OrderType.MARKET:
         return Order_TimeInForce.TIME_IN_FORCE_IOC
@@ -188,9 +188,13 @@ def calculate_time_in_force(
             raise Exception("Unexpected code path: time_in_force")
     elif type == OrderType.STOP_MARKET or type == OrderType.TAKE_PROFIT_MARKET:
         if execution == OrderExecution.DEFAULT:
-            raise Exception("Execution value DEFAULT not supported for STOP_MARKET or TAKE_PROFIT_MARKET")
+            raise Exception(
+                "Execution value DEFAULT not supported for STOP_MARKET or TAKE_PROFIT_MARKET"
+            )
         elif execution == OrderExecution.POST_ONLY:
-            raise Exception("Execution value POST_ONLY not supported for STOP_MARKET or TAKE_PROFIT_MARKET")
+            raise Exception(
+                "Execution value POST_ONLY not supported for STOP_MARKET or TAKE_PROFIT_MARKET"
+            )
         if execution == OrderExecution.FOK:
             return Order_TimeInForce.TIME_IN_FORCE_FILL_OR_KILL
         elif execution == OrderExecution.IOC:

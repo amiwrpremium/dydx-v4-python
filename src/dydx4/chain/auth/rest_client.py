@@ -1,4 +1,3 @@
-
 """Implementation of Auth interface using REST."""
 
 from google.protobuf.json_format import Parse
@@ -12,6 +11,7 @@ from v4_proto.cosmos.auth.v1beta1.query_pb2 import (
 
 from ..auth.interface import Auth
 from ..common.rest_client import RestClient
+
 
 class AuthRestClient(Auth):
     """Auth REST client."""

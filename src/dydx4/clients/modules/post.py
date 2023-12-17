@@ -18,21 +18,20 @@ from ...chain.aerial.client.utils import prepare_and_broadcast_basic_transaction
 
 class Post:
     def __init__(
-            self,
-            config: ValidatorConfig,
+        self,
+        config: ValidatorConfig,
     ):
         self.config = config
         self.composer = Composer()
 
     def send_message(
-            self,
-            subaccount: Subaccount,
-            msg: _message.Message,
-            zeroFee: bool = False,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        msg: _message.Message,
+        zeroFee: bool = False,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
-
-        '''
+        """
         Send a message
 
         :param subaccount: required
@@ -42,7 +41,7 @@ class Post:
         :type msg: Message
 
         :returns: Tx information
-        '''
+        """
 
         wallet = subaccount.wallet
         network = NetworkConfig.fetch_mainnet()
@@ -57,29 +56,31 @@ class Post:
             sender=wallet,
             gas_limit=gas_limit,
             memo=None,
-            broadcast_mode=broadcast_mode if (broadcast_mode != None) else self.default_broadcast_mode(msg),
+            broadcast_mode=broadcast_mode
+            if (broadcast_mode != None)
+            else self.default_broadcast_mode(msg),
             fee=0 if zeroFee else None,
         )
 
     def place_order(
-            self,
-            subaccount: Subaccount,
-            client_id: int,
-            clob_pair_id: int,
-            side: Order.Side,
-            quantums: int,
-            subticks: int,
-            time_in_force: Order.TimeInForce,
-            order_flags: int,
-            reduce_only: bool,
-            good_til_block: int,
-            good_til_block_time: int,
-            client_metadata: int,
-            condition_type: Order.ConditionType = Order.ConditionType.CONDITION_TYPE_UNSPECIFIED,
-            conditional_order_trigger_subticks: int = 0,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        client_id: int,
+        clob_pair_id: int,
+        side: Order.Side,
+        quantums: int,
+        subticks: int,
+        time_in_force: Order.TimeInForce,
+        order_flags: int,
+        reduce_only: bool,
+        good_til_block: int,
+        good_til_block_time: int,
+        client_metadata: int,
+        condition_type: Order.ConditionType = Order.ConditionType.CONDITION_TYPE_UNSPECIFIED,
+        conditional_order_trigger_subticks: int = 0,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
-        '''
+        """
         Place order
 
         :param subaccount: required
@@ -116,7 +117,7 @@ class Post:
         :type reduce_only: bool
 
         :returns: Tx information
-        '''
+        """
         # prepare tx msg
         subaccount_number = subaccount.subaccount_number
 
@@ -138,17 +139,14 @@ class Post:
             conditional_order_trigger_subticks=conditional_order_trigger_subticks,
         )
         return self.send_message(
-            subaccount=subaccount,
-            msg=msg,
-            zeroFee=True,
-            broadcast_mode=broadcast_mode
+            subaccount=subaccount, msg=msg, zeroFee=True, broadcast_mode=broadcast_mode
         )
 
     def place_order_object(
-            self,
-            subaccount: Subaccount,
-            place_order: Any,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        place_order: Any,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
         return self.place_order(
             subaccount=subaccount,
@@ -163,21 +161,23 @@ class Post:
             good_til_block=place_order.get("good_til_block", 0),
             good_til_block_time=place_order.get("good_til_block_time", 0),
             client_metadata=place_order.get("client_metadata", 0),
-            conditional_order_trigger_subticks=place_order.get("conditional_order_trigger_subticks", 0),
+            conditional_order_trigger_subticks=place_order.get(
+                "conditional_order_trigger_subticks", 0
+            ),
             broadcast_mode=broadcast_mode,
         )
 
     def cancel_order(
-            self,
-            subaccount: Subaccount,
-            client_id: int,
-            clob_pair_id: int,
-            order_flags: int,
-            good_til_block: int,
-            good_til_block_time: int,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        client_id: int,
+        clob_pair_id: int,
+        order_flags: int,
+        good_til_block: int,
+        good_til_block_time: int,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
-        '''
+        """
         Cancel order
 
         :param subaccount: required
@@ -202,7 +202,7 @@ class Post:
         :type broadcast_mode: BroadcastMode
 
         :returns: Tx information
-        '''
+        """
         msg = self.composer.compose_msg_cancel_order(
             subaccount.address,
             subaccount.subaccount_number,
@@ -212,13 +212,15 @@ class Post:
             good_til_block,
             good_til_block_time,
         )
-        return self.send_message(subaccount, msg, zeroFee=True, broadcast_mode=broadcast_mode)
+        return self.send_message(
+            subaccount, msg, zeroFee=True, broadcast_mode=broadcast_mode
+        )
 
     def cancel_order_object(
-            self,
-            subaccount: Subaccount,
-            cancel_order: Any,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        cancel_order: Any,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
         return self.cancel_order(
             subaccount,
@@ -231,13 +233,13 @@ class Post:
         )
 
     def transfer(
-            self,
-            subaccount: Subaccount,
-            recipient_address: str,
-            recipient_subaccount_number: int,
-            asset_id: int,
-            amount: int,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        recipient_address: str,
+        recipient_subaccount_number: int,
+        asset_id: int,
+        amount: int,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
         msg = self.composer.compose_msg_transfer(
             subaccount.address,
@@ -250,11 +252,11 @@ class Post:
         return self.send_message(subaccount, msg, broadcast_mode=broadcast_mode)
 
     def deposit(
-            self,
-            subaccount: Subaccount,
-            asset_id: int,
-            quantums: int,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        asset_id: int,
+        quantums: int,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
         msg = self.composer.compose_msg_deposit_to_subaccount(
             subaccount.address,
@@ -265,11 +267,11 @@ class Post:
         return self.send_message(subaccount, msg, broadcast_mode=broadcast_mode)
 
     def withdraw(
-            self,
-            subaccount: Subaccount,
-            asset_id: int,
-            quantums: int,
-            broadcast_mode: Optional[BroadcastMode] = None,
+        self,
+        subaccount: Subaccount,
+        asset_id: int,
+        quantums: int,
+        broadcast_mode: Optional[BroadcastMode] = None,
     ) -> SubmittedTx:
         msg = self.composer.compose_msg_withdraw_from_subaccount(
             subaccount.address,

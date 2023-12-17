@@ -1,32 +1,39 @@
 from v4_proto.dydxprotocol.clob.tx_pb2 import MsgPlaceOrder, MsgCancelOrder
 from v4_proto.dydxprotocol.clob.order_pb2 import Order, OrderId
 from v4_proto.dydxprotocol.subaccounts.subaccount_pb2 import SubaccountId
-from v4_proto.dydxprotocol.sending.transfer_pb2 import Transfer, MsgWithdrawFromSubaccount, MsgDepositToSubaccount
+from v4_proto.dydxprotocol.sending.transfer_pb2 import (
+    Transfer,
+    MsgWithdrawFromSubaccount,
+    MsgDepositToSubaccount,
+)
 from v4_proto.dydxprotocol.sending.tx_pb2 import MsgCreateTransfer
 
-from .helpers.chain_helpers import is_order_flag_stateful_order, validate_good_til_fields
+from .helpers.chain_helpers import (
+    is_order_flag_stateful_order,
+    validate_good_til_fields,
+)
 
 
 class Composer:
     def compose_msg_place_order(
-            self,
-            address: str,
-            subaccount_number: int,
-            client_id: int,
-            clob_pair_id: int,
-            order_flags: int,
-            good_til_block: int,
-            good_til_block_time: int,
-            side: Order.Side,
-            quantums: int,
-            subticks: int,
-            time_in_force: Order.TimeInForce,
-            reduce_only: bool,
-            client_metadata: int,
-            condition_type: Order.ConditionType,
-            conditional_order_trigger_subticks: int,
+        self,
+        address: str,
+        subaccount_number: int,
+        client_id: int,
+        clob_pair_id: int,
+        order_flags: int,
+        good_til_block: int,
+        good_til_block_time: int,
+        side: Order.Side,
+        quantums: int,
+        subticks: int,
+        time_in_force: Order.TimeInForce,
+        reduce_only: bool,
+        client_metadata: int,
+        condition_type: Order.ConditionType,
+        conditional_order_trigger_subticks: int,
     ) -> MsgPlaceOrder:
-        '''
+        """
         Compose a place order message
 
         :param address: required
@@ -75,7 +82,7 @@ class Composer:
         :type conditional_order_trigger_subticks: int
 
         :returns: Place order message, to be sent to chain
-        '''
+        """
         subaccount_id = SubaccountId(owner=address, number=subaccount_number)
 
         is_stateful_order = is_order_flag_stateful_order(order_flags)
@@ -85,45 +92,49 @@ class Composer:
             subaccount_id=subaccount_id,
             client_id=client_id,
             order_flags=order_flags,
-            clob_pair_id=int(clob_pair_id)
+            clob_pair_id=int(clob_pair_id),
         )
 
-        order = Order(
-            order_id=order_id,
-            side=side,
-            quantums=quantums,
-            subticks=subticks,
-            good_til_block=good_til_block,
-            time_in_force=time_in_force.value,
-            reduce_only=reduce_only,
-            client_metadata=client_metadata,
-            condition_type=condition_type,
-            conditional_order_trigger_subticks=conditional_order_trigger_subticks,
-        ) if (good_til_block != 0) else Order(
-            order_id=order_id,
-            side=side,
-            quantums=quantums,
-            subticks=subticks,
-            good_til_block_time=good_til_block_time,
-            time_in_force=time_in_force.value,
-            reduce_only=reduce_only,
-            client_metadata=client_metadata,
-            condition_type=condition_type,
-            conditional_order_trigger_subticks=conditional_order_trigger_subticks,
+        order = (
+            Order(
+                order_id=order_id,
+                side=side,
+                quantums=quantums,
+                subticks=subticks,
+                good_til_block=good_til_block,
+                time_in_force=time_in_force.value,
+                reduce_only=reduce_only,
+                client_metadata=client_metadata,
+                condition_type=condition_type,
+                conditional_order_trigger_subticks=conditional_order_trigger_subticks,
+            )
+            if (good_til_block != 0)
+            else Order(
+                order_id=order_id,
+                side=side,
+                quantums=quantums,
+                subticks=subticks,
+                good_til_block_time=good_til_block_time,
+                time_in_force=time_in_force.value,
+                reduce_only=reduce_only,
+                client_metadata=client_metadata,
+                condition_type=condition_type,
+                conditional_order_trigger_subticks=conditional_order_trigger_subticks,
+            )
         )
         return MsgPlaceOrder(order=order)
 
     def compose_msg_cancel_order(
-            self,
-            address: str,
-            subaccount_number: int,
-            client_id: int,
-            clob_pair_id: int,
-            order_flags: int,
-            good_til_block: int,
-            good_til_block_time: int,
+        self,
+        address: str,
+        subaccount_number: int,
+        client_id: int,
+        clob_pair_id: int,
+        order_flags: int,
+        good_til_block: int,
+        good_til_block_time: int,
     ) -> MsgCancelOrder:
-        '''
+        """
         Compose a cancel order messasge
 
         :param address: required
@@ -149,7 +160,7 @@ class Composer:
 
 
         :returns: Tx information
-        '''
+        """
         subaccount_id = SubaccountId(owner=address, number=subaccount_number)
         is_stateful_order = is_order_flag_stateful_order(order_flags)
         validate_good_til_fields(is_stateful_order, good_til_block_time, good_til_block)
@@ -158,53 +169,49 @@ class Composer:
             subaccount_id=subaccount_id,
             client_id=client_id,
             order_flags=order_flags,
-            clob_pair_id=int(clob_pair_id)
+            clob_pair_id=int(clob_pair_id),
         )
 
         if is_stateful_order:
             return MsgCancelOrder(
-                order_id=order_id,
-                good_til_block_time=good_til_block_time
+                order_id=order_id, good_til_block_time=good_til_block_time
             )
-        return MsgCancelOrder(
-            order_id=order_id,
-            good_til_block=good_til_block
-        )
+        return MsgCancelOrder(order_id=order_id, good_til_block=good_til_block)
 
     def compose_msg_transfer(
-            self,
-            address: str,
-            subaccount_number: int,
-            recipient_address: str,
-            recipient_subaccount_number: int,
-            asset_id: int,
-            amount: int
+        self,
+        address: str,
+        subaccount_number: int,
+        recipient_address: str,
+        recipient_subaccount_number: int,
+        asset_id: int,
+        amount: int,
     ) -> MsgCreateTransfer:
         sender = SubaccountId(owner=address, number=subaccount_number)
-        recipient = SubaccountId(owner=recipient_address, number=recipient_subaccount_number)
+        recipient = SubaccountId(
+            owner=recipient_address, number=recipient_subaccount_number
+        )
 
-        transfer = Transfer(sender=sender, recipient=recipient, asset_id=asset_id, amount=amount)
+        transfer = Transfer(
+            sender=sender, recipient=recipient, asset_id=asset_id, amount=amount
+        )
 
         return MsgCreateTransfer(transfer=transfer)
 
     def compose_msg_deposit_to_subaccount(
-            self,
-            address: str,
-            subaccount_number: int,
-            asset_id: int,
-            quantums: int
+        self, address: str, subaccount_number: int, asset_id: int, quantums: int
     ) -> MsgDepositToSubaccount:
         recipient = SubaccountId(owner=address, number=subaccount_number)
 
-        return MsgDepositToSubaccount(sender=address, recipient=recipient, asset_id=asset_id, quantums=quantums)
+        return MsgDepositToSubaccount(
+            sender=address, recipient=recipient, asset_id=asset_id, quantums=quantums
+        )
 
     def compose_msg_withdraw_from_subaccount(
-            self,
-            address: str,
-            subaccount_number: int,
-            asset_id: int,
-            quantums: int
+        self, address: str, subaccount_number: int, asset_id: int, quantums: int
     ) -> MsgWithdrawFromSubaccount:
         sender = SubaccountId(owner=address, number=subaccount_number)
 
-        return MsgWithdrawFromSubaccount(sender=sender, recipient=address, asset_id=asset_id, quantums=quantums)
+        return MsgWithdrawFromSubaccount(
+            sender=sender, recipient=address, asset_id=asset_id, quantums=quantums
+        )

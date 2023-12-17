@@ -1,4 +1,3 @@
-
 """Ledger faucet API interface."""
 
 import time

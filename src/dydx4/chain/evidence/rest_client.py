@@ -31,6 +31,7 @@ from v4_proto.cosmos.evidence.v1beta1.query_pb2 import (
 from .interface import Evidence
 from ..common.rest_client import RestClient
 
+
 class EvidenceRestClient(Evidence):
     """Evidence REST client."""
 

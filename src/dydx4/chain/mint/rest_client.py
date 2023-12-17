@@ -34,6 +34,7 @@ from .interface import Mint
 from ..common.rest_client import RestClient
 from ..common.utils import json_encode
 
+
 def isNumber(value: Union[str, bytes]) -> bool:
     """
     Check is string ob bytes is number.

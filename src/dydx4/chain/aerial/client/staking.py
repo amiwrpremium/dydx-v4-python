@@ -1,4 +1,3 @@
-
 """Staking functionality."""
 
 from enum import Enum
@@ -11,6 +10,7 @@ from v4_proto.cosmos.staking.v1beta1.tx_pb2 import (
 )
 
 from ...crypto.address import Address
+
 
 class ValidatorStatus(Enum):
     """Validator status."""

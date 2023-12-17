@@ -1,4 +1,3 @@
-
 """Transaction helpers."""
 
 import re

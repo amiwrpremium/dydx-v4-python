@@ -1,4 +1,3 @@
-
 """Interface for the Auth functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod

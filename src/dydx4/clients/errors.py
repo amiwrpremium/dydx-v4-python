@@ -40,13 +40,13 @@ class DydxApiError(DydxError):
         except ValueError:
             self.msg = response.text
         self.response = response
-        self.request = getattr(response, 'request', None)
+        self.request = getattr(response, "request", None)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return 'DydxApiError(status_code={}, response={})'.format(
+        return "DydxApiError(status_code={}, response={})".format(
             self.status_code,
             self.msg,
         )

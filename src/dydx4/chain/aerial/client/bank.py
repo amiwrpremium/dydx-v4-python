@@ -1,10 +1,10 @@
-
 """Bank send message."""
 
 from v4_proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from v4_proto.cosmos.base.v1beta1.coin_pb2 import Coin
 
 from ...crypto.address import Address
+
 
 def create_bank_send_msg(
     from_address: Address, to_address: Address, amount: int, denom: str

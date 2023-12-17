@@ -1,4 +1,3 @@
-
 """Client functionality."""
 
 import json
@@ -360,7 +359,6 @@ class LedgerClient:
             req, self.staking.DelegatorDelegations, per_page_limit=1
         ):
             for item in resp.delegation_responses:
-
                 req = QueryDelegationRewardsRequest(
                     delegator_address=str(address),
                     validator_address=str(item.delegation.validator_address),

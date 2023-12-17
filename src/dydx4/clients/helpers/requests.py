@@ -8,16 +8,21 @@ from ..helpers.request_helpers import remove_nones
 
 # TODO: Use a separate session per client instance.
 session = requests.session()
-session.headers.update({
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'User-Agent': 'dydx/python',
-})
+session.headers.update(
+    {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "dydx/python",
+    }
+)
 
 
 class Response(object):
     def __init__(
-            self, status_code: int, data: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, Any]] = None
+        self,
+        status_code: int,
+        data: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, Any]] = None,
     ):
         if data is None:
             data = {}
@@ -27,8 +32,11 @@ class Response(object):
 
 
 def request(
-        uri: str, method: str, headers: Optional[Dict[str, Any]] = None,
-        data_values: Optional[Dict[str, Any]] = None, api_timeout: Optional[int] = None
+    uri: str,
+    method: str,
+    headers: Optional[Dict[str, Any]] = None,
+    data_values: Optional[Dict[str, Any]] = None,
+    api_timeout: Optional[int] = None,
 ) -> Response:
     if headers is None:
         headers = {}
@@ -38,12 +46,10 @@ def request(
         uri,
         method,
         headers,
-        data=json.dumps(
-            remove_nones(data_values)
-        ),
-        timeout=api_timeout
+        data=json.dumps(remove_nones(data_values)),
+        timeout=api_timeout,
     )
-    if not str(response.status_code).startswith('2'):
+    if not str(response.status_code).startswith("2"):
         raise DydxApiError(response)
 
     if response.content:

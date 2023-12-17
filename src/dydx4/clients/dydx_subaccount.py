@@ -4,9 +4,9 @@ from .constants import BECH32_PREFIX
 
 class Subaccount:
     def __init__(
-            self,
-            wallet: LocalWallet,
-            subaccount_number: int = 0,
+        self,
+        wallet: LocalWallet,
+        subaccount_number: int = 0,
     ):
         self.wallet = wallet
         self.subaccount_number = subaccount_number

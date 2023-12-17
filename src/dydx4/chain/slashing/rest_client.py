@@ -30,6 +30,7 @@ from v4_proto.cosmos.slashing.v1beta1.query_pb2 import (
 from .interface import Slashing
 from ..common.rest_client import RestClient
 
+
 class SlashingRestClient(Slashing):
     """Slashing REST client."""
 

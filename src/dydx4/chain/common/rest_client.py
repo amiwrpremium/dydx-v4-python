@@ -1,4 +1,3 @@
-
 """Implementation of REST api client."""
 
 import base64

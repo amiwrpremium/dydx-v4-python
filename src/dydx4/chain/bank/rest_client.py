@@ -1,4 +1,3 @@
-
 """Implementation of Bank interface using REST."""
 
 from google.protobuf.json_format import Parse
@@ -22,6 +21,7 @@ from v4_proto.cosmos.bank.v1beta1.query_pb2 import (
 
 from ..bank.interface import Bank
 from ..common.rest_client import RestClient
+
 
 class BankRestClient(Bank):
     """Bank REST client."""

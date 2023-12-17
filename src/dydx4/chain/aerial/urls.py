@@ -1,4 +1,3 @@
-
 """Parsing the URL."""
 
 from dataclasses import dataclass

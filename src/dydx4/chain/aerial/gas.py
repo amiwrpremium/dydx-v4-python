@@ -1,4 +1,3 @@
-
 """Transaction gas strategy."""
 
 from abc import ABC, abstractmethod

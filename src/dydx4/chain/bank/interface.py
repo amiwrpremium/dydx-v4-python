@@ -1,4 +1,3 @@
-
 """Interface for the Bank functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod

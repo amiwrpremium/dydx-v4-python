@@ -5,11 +5,7 @@ from ..helpers.requests import request, Response
 
 
 class Markets(object):
-    def __init__(
-            self,
-            indexerHost: str,
-            api_timeout: Optional[int] = None
-    ):
+    def __init__(self, indexerHost: str, api_timeout: Optional[int] = None):
         self.host = indexerHost
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT
 
@@ -21,14 +17,14 @@ class Markets(object):
             params = {}
         return request(
             generate_query_path(self.host + request_path, params),
-            'get',
+            "get",
             api_timeout=self.api_timeout,
         )
 
     # ============ Requests ============
 
     def get_perpetual_markets(self, market: str = None) -> Response:
-        '''
+        """
         Get one or perpetual markets
 
         :param market: optional
@@ -42,14 +38,17 @@ class Markets(object):
         :returns: Market array
 
         :raises: DydxAPIError
-        '''
-        uri = '/v4/perpetualMarkets'
-        return self._get(uri, {
-            'ticker': market,
-        })
+        """
+        uri = "/v4/perpetualMarkets"
+        return self._get(
+            uri,
+            {
+                "ticker": market,
+            },
+        )
 
     def get_perpetual_market_orderbook(self, market: str) -> Response:
-        '''
+        """
         Get orderbook for a perpetual market
 
         :param market: required
@@ -64,17 +63,14 @@ class Markets(object):
         for a market
 
         :raises: DydxAPIError
-        '''
-        uri = '/'.join(['/v4/orderbooks/perpetualMarket', market])
+        """
+        uri = "/".join(["/v4/orderbooks/perpetualMarket", market])
         return self._get(uri)
 
     def get_perpetual_market_trades(
-            self,
-            market: str,
-            starting_before_or_at_height: int = None,
-            limit: int = None
+        self, market: str, starting_before_or_at_height: int = None, limit: int = None
     ) -> Response:
-        '''
+        """
         Get trades for a perpetual market
 
         :param market: required
@@ -91,22 +87,22 @@ class Markets(object):
         :returns: Trade array
 
         :raises: DydxAPIError
-        '''
-        uri = '/'.join(['/v4/trades/perpetualMarket', market])
+        """
+        uri = "/".join(["/v4/trades/perpetualMarket", market])
         return self._get(
             uri,
-            {'createdBeforeOrAtHeight': starting_before_or_at_height, 'limit': limit},
+            {"createdBeforeOrAtHeight": starting_before_or_at_height, "limit": limit},
         )
 
     def get_perpetual_market_candles(
-            self,
-            market: str,
-            resolution: str,
-            from_iso: str = None,
-            to_iso: str = None,
-            limit: int = None,
+        self,
+        market: str,
+        resolution: str,
+        from_iso: str = None,
+        to_iso: str = None,
+        limit: int = None,
     ) -> Response:
-        '''
+        """
         Get Candles
 
         :param market: required
@@ -140,26 +136,26 @@ class Markets(object):
         :returns: Array of candles
 
         :raises: DydxAPIError
-        '''
-        uri = '/'.join(['/v4/candles/perpetualMarkets', market])
+        """
+        uri = "/".join(["/v4/candles/perpetualMarkets", market])
         return self._get(
             uri,
             {
-                'resolution': resolution,
-                'fromISO': from_iso,
-                'toISO': to_iso,
-                'limit': limit,
+                "resolution": resolution,
+                "fromISO": from_iso,
+                "toISO": to_iso,
+                "limit": limit,
             },
         )
 
     def get_perpetual_market_funding(
-            self,
-            market: str,
-            effective_before_or_at: str = None,
-            effective_before_or_at_height: int = None,
-            limit: int = None,
+        self,
+        market: str,
+        effective_before_or_at: str = None,
+        effective_before_or_at_height: int = None,
+        limit: int = None,
     ) -> Response:
-        '''
+        """
         Get Candles
 
         :param market: required
@@ -182,22 +178,19 @@ class Markets(object):
         :returns: Array of candles
 
         :raises: DydxAPIError
-        '''
-        uri = '/'.join(['/v4/historicalFunding', market])
+        """
+        uri = "/".join(["/v4/historicalFunding", market])
         return self._get(
             uri,
             {
-                'effectiveBeforeOrAt': effective_before_or_at,
-                'effectiveBeforeOrAtHeight': effective_before_or_at_height,
-                'limit': limit,
+                "effectiveBeforeOrAt": effective_before_or_at,
+                "effectiveBeforeOrAtHeight": effective_before_or_at_height,
+                "limit": limit,
             },
         )
 
-    def get_perpetual_markets_sparklines(
-            self,
-            period: str = 'ONE_DAY'
-    ) -> Response:
-        '''
+    def get_perpetual_markets_sparklines(self, period: str = "ONE_DAY") -> Response:
+        """
         Get Sparklines
 
         :param period: required
@@ -209,11 +202,11 @@ class Markets(object):
         :returns: Array of sparklines
 
         :raises: DydxAPIError
-        '''
-        uri = '/v4/sparklines'
+        """
+        uri = "/v4/sparklines"
         return self._get(
             uri,
             {
-                'timePeriod': period,
+                "timePeriod": period,
             },
         )
