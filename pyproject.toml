@@ -7,7 +7,7 @@ package-dir = {"src" = "dydx4"}
 name = "dydx-v4-python"
 version = "0.0.1"
 description = "dYdX Chain Client"
-authors = ["amiwrpremium@gmail.com"]
+authors = ["AMiWR <amiwrpremium@gmail.com>"]
 license = "AGPL-3.0"
 readme = "README.md"
 
