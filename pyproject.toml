@@ -1,15 +1,29 @@
 # pyproject.toml
 
-[tool.setuptools]
-package-dir = {"src" = "dydx4"}
-
 [tool.poetry]
 name = "dydx-v4-python"
 version = "0.0.2"
 description = "dYdX Chain Client"
 authors = ["AMiWR <amiwrpremium@gmail.com>"]
-license = "AGPL-3.0"
+license = "MIT"
 readme = "README.md"
+repository = "https://github.com/amiwrpremium/dydx-v4-python"
+homepage = "https://github.com/amiwrpremium/dydx-v4-python"
+keywords = ["dydx", "dydx-v4", "dydx-v4-python", "dydx-python", "dydx-v4-client", "dydx-client", "dydx-v4-python-client", "dydx-python-client", "dydx-v4-python-sdk", "dydx-python-sdk", "dydx-v4-python-api", "dydx-python-api"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
