@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "dydx-v4-python"
-version = "0.0.3"
+version = "0.0.4"
 description = "dYdX Chain Client"
 authors = ["AMiWR <amiwrpremium@gmail.com>"]
 license = "MIT"
